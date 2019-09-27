@@ -64,6 +64,7 @@ class Files(object):
         List, LogIn = self.ParseJSON(PathToJSON)
 
         thread_login = threading.Thread(target= self.CheckLoginInfo, args=(LogIn, Login))
+        thread_login.start()
 
         if False in Login:
             sys.exit()
@@ -74,12 +75,12 @@ class Files(object):
         except Exception:
             print(Colors.FAIL + "Connection error" + Colors.ENDC)
             sys.exit()
+        
         array = [List, ftp]
 
         thread_to   = threading.Thread(target= self.CheckPathOnFTP,      args=(array, value_to))
         thread_from = threading.Thread(target= self.CheckPathOnComputer, args=(List, value_from))
 
-        thread_login.start()
         thread_from.start()
         thread_to.start()
 
@@ -140,9 +141,6 @@ class Files(object):
             else:
                 ListOfBools.append(True)
         return ListOfBools
-
-        
-        
 
     
 #main
