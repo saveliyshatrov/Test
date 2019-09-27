@@ -1,0 +1,26 @@
+{
+    "forms":{
+            "host" : "127.0.0.1",
+            "username" : "time_bitch",
+            "password" : "123"
+    }
+    ,
+    "files":[
+        {
+            "from" : "/home/time_bitch/Документы/python/test/from/from1/aoi_ogata.jpg",
+            "to" : "ftp/files/to1"
+        },
+        {
+            "from" : "/home/time_bitch/Документы/python/test/from/from1/pokras.jpg",
+            "to" : "ftpp/files/to1"
+        },
+        {
+            "from" : "/home/time_bitch/Документы/python/test/from/from2/aoi_ogata.jpg",
+            "to" : "ftp/files/to2"
+        },
+        {
+            "from" : "/home/time_bitch/Документы/python/test/from/from3/pokras.jpg",
+            "to" : "ftp/files/to3"
+        }
+    ]
+}
