@@ -30,12 +30,15 @@ class Files(object):
 
         List = []
         LogIn = []
-        for i in range(len(data['files'])):
-            List.append(Files(data['files'][i]['from'], data['files'][i]['to']))
+        try:
+            for i in range(len(data['files'])):
+                List.append(Files(data['files'][i]['from'], data['files'][i]['to']))
 
-        LogIn.append(data['forms']['host'])
-        LogIn.append(data['forms']['username'])
-        LogIn.append(data['forms']['password'])
+            LogIn.append(data['forms']['host'])
+            LogIn.append(data['forms']['username'])
+            LogIn.append(data['forms']['password'])
+        except KeyError:
+            print(Colors.FAIL + 'Error with JSON file' + Colors.ENDC)
             
         return List, LogIn
 
@@ -75,7 +78,7 @@ class Files(object):
         except Exception:
             print(Colors.FAIL + "Connection error" + Colors.ENDC)
             sys.exit()
-        
+
         array = [List, ftp]
 
         thread_to   = threading.Thread(target= self.CheckPathOnFTP,      args=(array, value_to))
