@@ -111,18 +111,18 @@ class Files(object):
         List = array[0]
         ftp = array[1]
         for n in range(len(List)):
-            BOOLS = []
+            BOOLS = 0
             folders = os.path.normpath(List[n].url_to).split(os.sep)
             for i in range(len(folders)):
                 try:
                     ftp.cwd(folders[i])
                 except Exception:
-                    BOOLS.append(1)
+                    BOOLS += 1
             
-            for i in range(len(folders) - len(BOOLS)):
+            for i in range(len(folders) - BOOLS):
                 ftp.cwd('../')
             
-            if BOOLS != []:
+            if BOOLS != 0:
                 ListOfBools.append(False)
             else:
                 ListOfBools.append(True)
