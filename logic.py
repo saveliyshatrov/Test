@@ -3,8 +3,14 @@ import json
 import threading
 import sys
 import ftplib
+"""
+a = [10, 20, 30, 40]
+b = ['a', 'b', 'c', 'd', 'e']
+for i, j in zip([10, 20, 30, 40], b):
+    print(i, j)
 
-
+sys.exit()
+"""
 #Чтобы красить текст в консоли
 class Colors:
     HEADER = '\033[95m'
@@ -30,6 +36,7 @@ class Files(object):
 
         List = []
         LogIn = []
+        
         try:
             for i in range(len(data['files'])):
                 List.append(Files(data['files'][i]['from'], data['files'][i]['to']))
@@ -42,35 +49,20 @@ class Files(object):
             
         return List, LogIn
 
-    #Проверка хоста, логина и пароля на существование
-    def CheckLoginInfo(self, List, login):
-        for i in range(len(List)):
-            if List[i] != '':
-                login.append(True)
-            else:
-                if i == 0:
-                    print(Colors.FAIL + 'error with host' + Colors.ENDC)
-                if i == 1:
-                    print(Colors.FAIL + 'error with username' + Colors.ENDC)
-                if i == 2:
-                    print(Colors.FAIL + 'error with password' + Colors.ENDC)
-                login.append(False)
-        return login
-
     #Передача на FTP сервер
     def TransferFiles(self, PathToJSON):
 
         value_from = []
         value_to = []
-        Login = []
 
         List, LogIn = self.ParseJSON(PathToJSON)
 
-        thread_login = threading.Thread(target= self.CheckLoginInfo, args=(LogIn, Login))
-        thread_login.start()
+        #Проверка хоста, логина и пароля на существование
+        for i, log in zip(["host", "username", "password"], LogIn):
+            if log == "":
+                print(Colors.FAIL + 'error with ' + i + Colors.ENDC)
+                sys.exit()
 
-        if False in Login:
-            sys.exit()
 
         try:
             ftp = ftplib.FTP(host = LogIn[0], user = LogIn[1], passwd = LogIn[2])
@@ -87,7 +79,6 @@ class Files(object):
         thread_from.start()
         thread_to.start()
 
-        thread_login.join()
         thread_from.join()
         thread_to.join()
 
@@ -99,7 +90,6 @@ class Files(object):
                     ftp.storlines('STOR ' + List[i].url_to + '/' + filename + file_extension, open(List[i].url_from,'rb'))
                     print(Colors.OKBLUE + 'File from path ' + List[i].url_from + ' was successfully transfered to ' + List[i].url_to + Colors.ENDC)
                 else:
-                    #print(List[i].url_to + ' || ' + filename + ' || ' + file_extension)
                     ftp.storbinary('STOR ' + List[i].url_to + '/' + filename + file_extension, open(List[i].url_from,'rb'))
                     print(Colors.OKBLUE + 'File from path ' + List[i].url_from + ' was successfully transfered to ' + List[i].url_to + Colors.ENDC)
             else:
